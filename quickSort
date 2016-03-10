@@ -1,0 +1,54 @@
+void sort_words(char *words[], const int num_words) {
+  char *pivot = words[0];
+  int lastIndex = num_words - 1;
+  int firstIndex;
+  
+  if(num_words < 2) return;
+  
+  for(int i = 1; i <= lastIndex; i++) {
+    while(strcmp(words[i], pivot) < 0) {
+      i++;
+      if(i > lastIndex) break;
+    }
+    
+    while(strcmp(words[lastIndex], pivot) > 0) {
+      lastIndex--;
+      if(lastIndex < i) break;
+    }
+    
+    if(i < lastIndex) {
+      // swap the words at i and lastIndex
+      char *temp = words[i];
+      words[i] = words[lastIndex];
+      words[lastIndex] = temp;
+    }
+    
+    firstIndex = i;
+  }
+  
+  printf("first %d, last %d\n", firstIndex, lastIndex);
+  
+  // swap the pivot with lastIndex
+  words[0] = words[lastIndex];
+  words[lastIndex] = pivot;
+  printf("After: first %s, last %s\n", words[0], words[lastIndex]);
+  
+  // create less array and greater array
+  char **less[lastIndex];
+  char **greater[num_words - lastIndex - 1];
+  
+  for(int i = 0; i <= lastIndex - 1; i++) {
+    less[i] = &words[i];
+    printf("%d in less is %s\n", i, *less[i]);
+  }
+    
+  for(int j = 0; j < num_words - lastIndex - 1; j++) {
+    greater[j] = &words[lastIndex + j + 1];
+    printf("%d in greater is %s\n", j, *greater[j]);
+  }
+   
+  printf("new round\n");
+  sort_words(*less, lastIndex);
+  sort_words(*greater, num_words - lastIndex - 1);
+  
+}
